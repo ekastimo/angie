@@ -1,4 +1,5 @@
 import * as rules from '@/utils/validations';
+
 export const ageRanges = ['0-12', '13-18', '18-35', '35-50', '50+'];
 export const contactCategory = ['Person', 'Company'];
 export const identificationCategory = ['Nin', 'Passport', 'DrivingPermit', 'VillageCard', 'Nssf', 'Other'];
@@ -8,6 +9,7 @@ export const civilStatus = ['Single', 'Married', 'Divorced', 'Other'];
 export const emailCategories = ['Personal', 'Work', 'Other'];
 export const phoneCategories = ['Mobile', 'Office', 'Home', 'Fax', 'Other'];
 export const addressCategories = ['Home', 'Work', 'Other'];
+export const dateCategories = ['Birthday', 'Anniversary', 'Other'];
 export const validationRules = {
     churchLocation: [
         rules.required()

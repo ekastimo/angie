@@ -9,13 +9,25 @@
             width="290px"
     >
         <template v-slot:activator="{ on }">
+
             <v-text-field
+                    v-if="withIcon"
                     v-bind:value="value"
                     v-on:input="$emit('input', $event)"
                     :label="label"
                     readonly
                     v-on="on"
-            ></v-text-field>
+                    :append-outer-icon="appendOuterIcon"
+                    @click:append-outer="$emit('iconClick')"
+            />
+            <v-text-field
+                    v-else
+                    v-bind:value="value"
+                    v-on:input="$emit('input', $event)"
+                    :label="label"
+                    readonly
+                    v-on="on"
+            />
         </template>
         <v-date-picker
                 v-bind:value="value"
@@ -31,7 +43,7 @@
 <script>
     export default {
         name: 'date-picker',
-        props: ['value', 'label'],
+        props: ['value', 'label', 'appendOuterIcon', 'withIcon'],
         data: () => ({
             date: null,
             modal: false,

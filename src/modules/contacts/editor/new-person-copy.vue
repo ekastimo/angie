@@ -14,13 +14,13 @@
                                 <v-flex xs12 md6>
                                     <v-text-field
                                             label="First name*"
-                                            v-model="formData.firstName"
+                                            v-model="formData.person.firstName"
                                             :rules="[rules.required()]"
                                     ></v-text-field>
                                 </v-flex>
                                 <v-flex xs12 md6>
                                     <v-text-field
-                                            v-model="formData.lastName"
+                                            v-model="formData.person.lastName"
                                             :rules="[rules.required()]"
                                             label="Last name*"
                                     />
@@ -30,13 +30,13 @@
                                 <v-flex xs12 md6>
                                     <v-text-field
                                             label="Middle name"
-                                            v-model="formData.middleName"
+                                            v-model="formData.person.middleName"
                                             :rules="[rules.required()]"
                                     />
                                 </v-flex>
                                 <v-flex xs12 md3>
                                     <v-select
-                                            v-model="formData.age"
+                                            v-model="formData.person.ageRange"
                                             :rules="[rules.required()]"
                                             :items="config.ageRanges"
                                             label="Age"
@@ -44,7 +44,7 @@
                                 </v-flex>
                                 <v-flex xs12 md3>
                                     <v-autocomplete
-                                            v-model="formData.gender"
+                                            v-model="formData.person.gender"
                                             :rules="[rules.required()]"
                                             :items="['Male','Female']"
                                             label="Gender"
@@ -76,48 +76,45 @@
                             </v-layout>
                         </template>
                         <template v-slot:dates>
-                            <v-layout row wrap v-for="(record,index) in formData.dates" :key="record.id">
-                                <v-flex xs3>
-                                    <v-autocomplete
-                                            v-model="record.category"
-                                            :rules="[rules.required()]"
-                                            :items="['Birthday','Anniversary','Other']"
-                                            label="Tag"
-                                    />
-                                </v-flex>
-                                <v-flex xs9>
-                                    <v-menu
-                                            ref="menu"
-                                            v-model="menu"
-                                            :close-on-content-click="false"
-                                            :nudge-right="40"
-                                            lazy
-                                            transition="scale-transition"
-                                            offset-y
-                                            full-width
-                                            min-width="290px"
+                            <v-card flat>
+                                <v-card-title class="pa-0 elevation-2">
+                                    <v-icon
+                                            left
+                                            color="primary"
+                                            small
                                     >
-                                        <template v-slot:activator="{ on }">
-                                            <v-text-field
-                                                    v-model="record.value"
+                                        calendar
+                                    </v-icon>
+                                    <span class="body-2">Dates</span>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat small @click="addDate">
+                                        <v-icon small>add</v-icon>
+                                        New
+                                    </v-btn>
+                                </v-card-title>
+                                <v-divider></v-divider>
+                                <v-card-text class="pa-0">
+                                    <v-layout row wrap v-for="(record,index) in formData.dates" :key="record.id">
+                                        <v-flex xs3>
+                                            <v-autocomplete
+                                                    v-model="record.category"
                                                     :rules="[rules.required()]"
-                                                    label="Date"
-                                                    readonly
-                                                    v-on="on"
+                                                    :items="config.dateCategories"
+                                                    label="Tag"
+                                            />
+                                        </v-flex>
+                                        <v-flex xs9>
+                                            <date-picker
+                                                    v-model="record.category"
+                                                    label="Date*"
                                                     append-outer-icon="delete"
-                                                    @click:append-outer="removeItem(index,'events')"
-                                            ></v-text-field>
-                                        </template>
-                                        <v-date-picker
-                                                ref="picker"
-                                                v-model="record.value"
-                                                :max="new Date().toISOString().substr(0, 10)"
-                                                min="1950-01-01"
-                                                @change="save"
-                                        ></v-date-picker>
-                                    </v-menu>
-                                </v-flex>
-                            </v-layout>
+                                                    @iconClick="removeItem(index,'dates')"
+                                                    :with-icon="true"
+                                            />
+                                        </v-flex>
+                                    </v-layout>
+                                </v-card-text>
+                            </v-card>
                         </template>
                         <template v-slot:contact>
                             <v-layout column>
@@ -259,6 +256,11 @@
                 </v-form>
             </v-card-text>
         </v-card>
+        <v-card>
+            <pre>
+                {{JSON.stringify(formData,null,2)}}
+            </pre>
+        </v-card>
     </v-container>
 </template>
 
@@ -271,10 +273,11 @@
     import * as rules from '@/utils/validations';
     import ContactSection from '@/modules/contacts/contact-section'
     import ContactStepper from '@/modules/contacts/editor/contact-stepper'
+    import DatePicker from '@/components/date-picker';
 
     export default {
         name: 'new-person',
-        components: {RemoteSelector, ContactSection, ContactStepper},
+        components: {RemoteSelector, ContactSection, ContactStepper, DatePicker},
         data: () => ({
             config,
             repo: null,
@@ -282,16 +285,18 @@
             valid: false,
             isSubmitting: false,
             rules,
-            date: null,
-            menu: false,
             formData: {
                 churchLocation: null,
                 cellGroup: null,
-                lastName: null,
-                middleName: null,
-                civilStatus: null,
-                gender: null,
-                age: null,
+                person: {
+                    lastName: null,
+                    middleName: null,
+                    civilStatus: null,
+                    gender: null,
+                    ageRange: null,
+                    avatar: '',
+                    about: '',
+                },
                 dates: [{category: null, value: null, key: random()}],
                 emails: [{address: null, category: null, isPrimary: true, id: random()}],
                 phones: [{number: null, category: null, isPrimary: true, id: random()}],
@@ -333,13 +338,16 @@
                     freeForm: null, latLon: null, category: null, isPrimary: true, id: random()
                 })
             },
+            addDate() {
+                this.formData.dates.push({
+                    category: null, value: null, key: random()
+                })
+            },
             removeItem(index, name) {
                 if (this.formData[name].length > 1) {
                     this.$delete(this.formData[name], index)
                 }
             },
-
-
             doSubmit() {
                 if (this.$refs.form.validate()) {
                     const {formData} = this;
