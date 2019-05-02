@@ -13,5 +13,5 @@ Vue.use(Vuetify, {
         info: '#009688',
         success: '#4caf50'
     },
-    iconfont: 'md',
+    iconfont: 'mdi',
 });

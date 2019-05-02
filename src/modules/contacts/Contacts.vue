@@ -52,7 +52,7 @@
             </v-layout>
         </v-container>
         <v-container fluid>
-            <v-btn fab dark top right absolute color="indigo" @click="dialog=!dialog">
+            <v-btn fab dark top right absolute color="secondary" small @click="dialog=!dialog">
                 <v-icon dark>add</v-icon>
             </v-btn>
             <v-dialog v-model="dialog" persistent :fullscreen="$vuetify.breakpoint.smAndDown" max-width="1000px">

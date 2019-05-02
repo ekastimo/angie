@@ -29,11 +29,20 @@
                 </v-list-tile-action>
             </v-list-tile>
         </v-list-group>
+        <v-divider></v-divider>
+        <v-list-tile @click="">
+            <v-list-tile-action></v-list-tile-action>
+            <v-list-tile-content @click.prevent='doLogout'>
+                <v-list-tile-title>Logout&nbsp;<v-icon small>chevron_right</v-icon></v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
     </v-list>
 </template>
 
 <script>
     import {localRoutes} from '@/data/constants';
+    import {mapActions} from 'vuex';
+    import {coreActions} from '@/modules/base/data';
 
     export default {
         data() {
@@ -74,7 +83,10 @@
                     }
                 ]
             }
-        }
+        },
+        methods: {
+            ...mapActions([coreActions.doLogout])
+        },
     }
 </script>
 
