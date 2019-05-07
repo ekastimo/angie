@@ -1,4 +1,5 @@
-import {IPerson} from '../modules/contacts/types';
+import {IPerson} from '@/modules/contacts/types';
+import  { v4 as uuid } from 'uuid';
 
 export const renderName = (person: IPerson, salutation?: boolean): string => {
     const name: string =
@@ -31,6 +32,10 @@ export const random = () => {
     return Math.floor(Math.random() * 99999999) + 1;
 };
 
+export const guid = () => {
+    return uuid()
+};
+
 export const safeGet = (data: any, field: string) => {
     try {
         return data[field];
@@ -51,5 +56,11 @@ export const parseAvatar = (value: string): string => {
         return `${part1[0]}${part2[0]}`.toLocaleUpperCase();
     }
     return value.trim()[0].toLocaleUpperCase();
+};
+
+export const copyObject = (data: any) => {
+    if (data) {
+        return JSON.parse(JSON.stringify(data));
+    }
 };
 

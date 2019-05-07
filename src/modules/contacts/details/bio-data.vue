@@ -1,5 +1,5 @@
 <template>
-    <v-card flat >
+    <v-card flat>
         <v-list two-line>
             <v-list-tile @click="">
                 <v-list-tile-action>
@@ -25,13 +25,13 @@
             </v-list-tile>
             <v-divider inset></v-divider>
 
-            <v-list-tile @click="">
+            <v-list-tile @click="" v-for="(event,index) in events" :key="event.id">
                 <v-list-tile-action>
-                    <v-icon color="primary">event</v-icon>
+                    <v-icon v-if="index ===0" color="primary">event</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-sub-title>Birthday</v-list-tile-sub-title>
-                    <v-list-tile-title>{{person.dateOfBirth|printBirthday}}</v-list-tile-title>
+                    <v-list-tile-sub-title>{{event.category}}</v-list-tile-sub-title>
+                    <v-list-tile-title>{{event.value|printBirthday}}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
         </v-list>
@@ -56,7 +56,13 @@
 <script>
     export default {
         name: 'bio-data',
-        props: ['person']
+        props: ['contact'],
+        data() {
+            return {
+                person: this.contact.person,
+                events: this.contact.events,
+            }
+        }
     }
 </script>
 

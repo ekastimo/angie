@@ -12,7 +12,7 @@
 
             <v-text-field
                     v-if="withIcon"
-                    v-bind:value="value"
+                    v-bind:value="parseDate(value)"
                     v-on:input="$emit('input', $event)"
                     :label="label"
                     readonly
@@ -22,7 +22,7 @@
             />
             <v-text-field
                     v-else
-                    v-bind:value="value"
+                    v-bind:value="parseDate(value)"
                     v-on:input="$emit('input', $event)"
                     :label="label"
                     readonly
@@ -30,7 +30,7 @@
             />
         </template>
         <v-date-picker
-                v-bind:value="value"
+                v-bind:value="parseDate(value)"
                 v-on:input="$emit('input', $event)"
                 scrollable
         >
@@ -41,13 +41,28 @@
     </v-dialog>
 </template>
 <script>
+    import {isValid, parse} from 'date-fns';
+
     export default {
         name: 'date-picker',
         props: ['value', 'label', 'appendOuterIcon', 'withIcon'],
         data: () => ({
             date: null,
             modal: false,
-        })
+        }),
+        methods: {
+            parseDate(dateValue) {
+                const canParse = typeof dateValue === Date || typeof dateValue === 'string'
+                if (canParse) {
+                    const isString = typeof dateValue === 'string'
+                    const data = isString ? new Date(dateValue) : dateValue;
+                    if (isValid(data)) {
+                        return data.toISOString().substr(0, 10)
+                    }
+                }
+                return undefined
+            }
+        }
     }
 </script>
 <style scoped>

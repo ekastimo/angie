@@ -48,13 +48,14 @@ export const actions = {
 
 const processContact = (contact: IContact) => {
     const {avatar} = contact.person;
-    const {id, person, emails: [email], phones: [phone], churchLocation, cellGroup} = contact;
+    const {id, person, emails: [email], phones: [phone], metaData: {churchLocation, cellGroup}} = contact;
     return {
         id,
         avatar, churchLocation, cellGroup,
         altAvatar: parseAvatar(renderName(contact.person)),
         fullName: renderName(person),
-        email: safeGet(email, 'address'), phone: safeGet(phone, 'number')
+        name: renderName(person),
+        email: safeGet(email, 'value'), phone: safeGet(phone, 'value')
     };
 };
 

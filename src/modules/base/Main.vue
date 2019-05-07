@@ -33,7 +33,7 @@
             </v-btn>
         </v-toolbar>
         <v-content>
-            <v-card>
+            <v-card flat>
                 <slot></slot>
             </v-card>
         </v-content>

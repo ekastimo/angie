@@ -24,7 +24,7 @@ export interface IPhone {
     isPrimary: boolean
 }
 
-export interface IDate {
+export interface IContactEvent {
     id: string
     value: string
     category: string
@@ -42,19 +42,22 @@ export interface ICompany {
     name: string
 }
 
+export interface IMetaData {
+    churchLocation: string
+    cellGroup: string
+}
+
 export interface IContact {
     id: string
     category: string
     person: IPerson
     emails: IEmail[]
     phones: IPhone[]
-    addresses?: IAddress[]
+    events: IContactEvent[]
+    addresses: IAddress[]
     company?: ICompany
     tags: string[]
-    churchLocation: string
-    cellGroup: string
-    cellGroupName: string
-    churchLocationName: string
+    metaData: IMetaData
 }
 
 

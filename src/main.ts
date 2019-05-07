@@ -8,6 +8,7 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import './main.css';
 import {printBirthday, printDate} from '@/utils/dates';
+import Toasted from 'vue-toasted';
 
 Vue.config.productionTip = false;
 
@@ -22,7 +23,7 @@ Vue.filter('capitalize', (value: any) => {
 
 Vue.filter('printBirthday', printBirthday);
 Vue.filter('printDate', printDate);
-
+Vue.use(Toasted)
 new Vue({
     router,
     store,
