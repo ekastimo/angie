@@ -7,7 +7,7 @@
                 </v-list-tile-action>
                 <v-list-tile-content>
                     <v-list-tile-sub-title>Gender</v-list-tile-sub-title>
-                    <v-list-tile-title>{{person.gender}}</v-list-tile-title>
+                    <v-list-tile-title>{{contact.person.gender}}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
 
@@ -20,12 +20,12 @@
 
                 <v-list-tile-content>
                     <v-list-tile-sub-title>Marital Status</v-list-tile-sub-title>
-                    <v-list-tile-title>{{person.civilStatus}}</v-list-tile-title>
+                    <v-list-tile-title>{{contact.person.civilStatus}}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider inset></v-divider>
 
-            <v-list-tile @click="" v-for="(event,index) in events" :key="event.id">
+            <v-list-tile @click="" v-for="(event,index) in contact.events" :key="event.id">
                 <v-list-tile-action>
                     <v-icon v-if="index ===0" color="primary">event</v-icon>
                 </v-list-tile-action>
@@ -46,7 +46,7 @@
                 <span class="subheading">About Me</span>
             </v-card-title>
             <v-card-text class="body-2 px-4 pt-0">
-                "{{person.about}}"
+                "{{contact.person.about}}"
             </v-card-text>
         </v-card>
     </v-card>
@@ -56,13 +56,7 @@
 <script>
     export default {
         name: 'bio-data',
-        props: ['contact'],
-        data() {
-            return {
-                person: this.contact.person,
-                events: this.contact.events,
-            }
-        }
+        props: ['contact']
     }
 </script>
 

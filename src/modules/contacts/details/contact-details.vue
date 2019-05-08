@@ -3,11 +3,11 @@
         <v-container grid-list-md fluid>
             <v-layout>
                 <v-flex v-if="$vuetify.breakpoint.mdAndUp" md4>
-                    <contact-list @select="selected = $event"/>
+                    <contact-list @select="onContactSelected"/>
                 </v-flex>
                 <v-flex xs12 md8>
                     <v-layout v-if="contact" row wrap justify-center>
-                        <v-flex xs12 sm10 md8>
+                        <v-flex xs12 sm10 >
                             <v-card class="mt-1" flat>
                                 <v-layout row wrap justify-center>
                                     <v-flex xs4 sm3 justify-center>
@@ -15,7 +15,6 @@
                                             <v-avatar
                                                     size="70px"
                                                     class="mt-4 elevation-10"
-
                                             >
                                                 <v-img :src="avatar" contain/>
                                             </v-avatar>
@@ -33,11 +32,8 @@
                                     </v-flex>
                                 </v-layout>
                                 <v-card-actions class="pl-4">
-
-
                                     <v-spacer/>
                                 </v-card-actions>
-
                                 <v-btn fab dark small color="primary"
                                        absolute
                                        top
@@ -48,7 +44,7 @@
                                 </v-btn>
                             </v-card>
                         </v-flex>
-                        <v-flex xs12 sm10 md8>
+                        <v-flex xs12 sm10>
                             <v-card flat>
                                 <v-tabs>
                                     <v-tabs-slider color="primary"></v-tabs-slider>
@@ -108,7 +104,7 @@
                             ></v-progress-circular>
                         </v-flex>
                     </v-layout>
-                    <v-dialog v-model="dialog" persistent :fullscreen="$vuetify.breakpoint.smAndDown"
+                    <v-dialog v-if="contact" v-model="dialog" persistent :fullscreen="$vuetify.breakpoint.smAndDown"
                               max-width="1000px">
                         <contact-editor
                                 @cancel="dialog=false"
@@ -128,7 +124,6 @@
     import BioData from '@/modules/contacts/details/bio-data.vue';
     import ContactEditor from '@/modules/contacts/editor/contact-editor';
     import ContactList from '@/modules/contacts/details/contacts-list.vue';
-    import {mapActions} from 'vuex';
     import {contactActions} from '@/modules/contacts/data/vuexConfig';
     import {renderName} from '@/utils/helpers';
     import image from '@/assets/person.png'
@@ -138,29 +133,22 @@
         name: 'contact-details',
         data() {
             return {
-                selected: undefined,
+                contactId: this.$route.params.contactId,
                 dialog: false,
                 text: `
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation
-                ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 `,
             }
         },
         computed: {
+            isLoading() {
+                return this.$store.state.contacts.isLoadingDetails
+            },
             contact() {
-                return this.selectedContact || this.defaultContact
-            },
-            defaultContact() {
-                const {contactId} = this.$route.params
-                return this.$store.getters.getContactById(contactId)
-            },
-            selectedContact() {
-                if (this.selected) {
-                    return this.$store.getters.getContactById(this.selected)
-                }
-                return undefined
+                return this.$store.getters.getContactById(this.contactId)
             },
             avatar() {
                 const {person = {}} = this.contact
@@ -171,16 +159,16 @@
             }
         },
         methods: {
-            ...mapActions([contactActions.fetchContact]),
-            onContactSelected(contactId){
-                this.selected = contactId
-                this.fetchContact(contactId)
+            async loadContact() {
+                await this.$store.dispatch(contactActions.fetchDetails, this.contactId)
+            },
+            async onContactSelected(contactId) {
+                this.contactId = contactId
+                await this.loadContact()
             }
         },
-        mounted() {
-            console.log('Mounted fetching contact')
-            const {contactId} = this.$route.params
-            this.fetchContact(contactId)
+        async mounted() {
+            await this.$store.dispatch(contactActions.fetchDetails, this.contactId)
         }
     }
 </script>

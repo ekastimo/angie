@@ -87,6 +87,7 @@ export const newContact = {
     addresses: [
         {
             freeForm: null,
+            placeId: null,
             latLon: null,
             category: null,
             isPrimary: true,

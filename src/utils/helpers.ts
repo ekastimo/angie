@@ -1,5 +1,5 @@
 import {IPerson} from '@/modules/contacts/types';
-import  { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 
 export const renderName = (person: IPerson, salutation?: boolean): string => {
     const name: string =
@@ -63,4 +63,3 @@ export const copyObject = (data: any) => {
         return JSON.parse(JSON.stringify(data));
     }
 };
-

@@ -4,44 +4,70 @@ import {remoteRoutes} from '@/data/constants';
 import {IContact} from '@/modules/contacts/types';
 import {parseAvatar, renderName, safeGet} from '@/utils/helpers';
 
-export const fetchContacts = 'fetchContacts';
-export const fetchContact = 'fetchContact';
-export const createContact = 'createContact';
-export const updateContact = 'updateContact';
+export const fetchAll = 'fetchAll';
+export const fetchAllStart = 'fetchAllStart';
+export const fetchAllSuccess = 'fetchAllSuccess';
+export const fetchAllError = 'fetchAllError';
 
-export const handleContacts = 'handleContacts';
-export const handleContact = 'handleContact';
+export const fetchDetails = 'fetchDetails';
+export const fetchDetailsStart = 'fetchDetailsStart';
+export const fetchDetailsSuccess = 'fetchDetailsSuccess';
+export const fetchDetailsError = 'fetchDetailsError';
+
+
 export const contactActions = {
-    fetchContacts, fetchContact, handleContacts, handleContact
+    fetchAll, fetchDetails
 };
 
 export const mutations = {
-    [handleContacts](state: any, payload: any = []) {
-        state.data = payload;
+
+    [fetchAllStart](state: any) {
+        state.isLoadingData = true;
+        state.error = undefined;
     },
-    [handleContact](state: any, payload: any = []) {
+    [fetchAllError](state: any, error: string) {
+        state.isLoadingData = false;
+        state.error = error;
+    },
+    [fetchAllSuccess](state: any, payload: any = []) {
+        state.data = payload;
+        state.isLoadingData = false;
+        state.error = undefined;
+    },
+
+    [fetchDetailsStart](state: any) {
+        state.isLoadingDetails = true;
+        state.error = undefined;
+    },
+    [fetchDetailsError](state: any, error: string) {
+        state.isLoadingDetails = false;
+        state.error = error;
+    },
+    [fetchDetailsSuccess](state: any, payload: any = []) {
         const index = state.details.findIndex((it: any) => it.id === payload.id);
         if (index >= 0) {
-            console.log('Updated rec', payload.id);
             Vue.set(state.details, index, payload);
         } else {
-            console.log('Added rec', payload.id);
             state.details.push(payload);
         }
+        state.isLoadingDetails = false;
+        state.error = undefined;
     }
 };
 
 export const actions = {
-    [fetchContacts]({commit}: any, payload: any) {
+    [fetchAll]({commit}: any, payload: any) {
+        commit(fetchAllStart);
         search(remoteRoutes.contacts, payload, response => {
             const fine = response.map(processContact);
-            commit(handleContacts, fine);
+            commit(fetchAllSuccess, fine);
         });
     },
-    [fetchContact]({commit}: any, payload: string) {
+    [fetchDetails]({commit}: any, payload: string) {
+        commit(fetchDetailsStart);
         const url = `${remoteRoutes.contactById}/${payload}`;
         get(url, response => {
-            commit(handleContact, response);
+            commit(fetchDetailsSuccess, response);
         });
     }
 };
@@ -68,7 +94,10 @@ export const getters = {
 
 export default {
     state: {
-        isLoading: false,
+        isLoadingData: false,
+        isLoadingDetails: false,
+        selected: undefined,
+        error: undefined,
         data: [],
         details: []
     },

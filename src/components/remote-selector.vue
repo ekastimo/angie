@@ -7,10 +7,10 @@
             :search-input.sync="search"
             hide-no-data
             hide-selected
-            item-text="label"
-            item-value="value"
+            :item-text="itemText"
+            :item-value="itemValue"
             :label="label"
-            :return-object="false"
+            :return-object="returnObject"
             :rules="rules"
             cache-items
             small-chips
@@ -22,7 +22,20 @@
 
     export default {
         name: 'remote-selector',
-        props: ['value', 'url', 'parser', 'label', 'icon', 'rules'],
+        props: {
+            value: [String, Object],
+            label: String,
+            url: String,
+            parser: Function,
+            icon: String,
+            rules: Array,
+            itemText: String,
+            itemValue: String,
+            returnObject: {
+                type: Boolean,
+                default: false
+            }
+        },
         data: () => ({
             isLoading: false,
             model: null,

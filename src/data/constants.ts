@@ -64,5 +64,6 @@ export const remoteRoutes = {
     eventsAgenda: url + '/api/evt/items',
 
     locations: url + '/api/chc/location',
+    googleMaps: url + '/api/maps',
     cellGroups: url + '/api/chc/cellgroup',
 };

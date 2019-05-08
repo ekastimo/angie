@@ -66,6 +66,16 @@
                                 </v-flex>
                             </v-layout>
                         </template>
+                        <template v-slot:about>
+                            <v-layout wrap>
+                                <v-flex xs12 >
+                                    <v-textarea
+                                            label="About"
+                                            v-model="formData.person.about"
+                                    ></v-textarea>
+                                </v-flex>
+                            </v-layout>
+                        </template>
                         <template v-slot:chc>
                             <v-layout wrap>
                                 <v-flex xs12 sm6>
@@ -131,7 +141,7 @@
                             </v-card>
                         </template>
                         <template v-slot:contact>
-                            <v-layout column>
+                            <v-layout row wrap>
                                 <v-flex xs12>
                                     <v-card flat>
                                         <v-card-title class="pa-0 elevation-2">
@@ -252,12 +262,15 @@
                                                     />
                                                 </v-flex>
                                                 <v-flex xs9>
-                                                    <v-text-field
-                                                            label="Location*"
-                                                            v-model="record.freeForm"
+                                                    <remote-selector
+                                                            return-object
+                                                            :value="record"
+                                                            v-on:input="handleAddress(index,$event)"
+                                                            :url='remoteRoutes.googleMaps'
                                                             :rules="[rules.required()]"
-                                                            append-outer-icon="delete"
-                                                            @click:append-outer="removeItem(index,'addresses')"
+                                                            label="Location*"
+                                                            item-text="freeForm"
+                                                            item-value="placeId"
                                                     />
                                                 </v-flex>
                                             </v-layout>
@@ -274,6 +287,11 @@
                 <v-btn color="blue darken-1" flat @click.prevent="$emit('cancel')">Close</v-btn>
                 <v-btn color="blue darken-1" flat @click="doSubmit">Save</v-btn>
             </v-card-actions>
+            <v-card-text max-width="500">
+                <pre>
+                    {{JSON.stringify(formData,null,2)}}
+                </pre>
+            </v-card-text>
         </v-card>
         <v-snackbar
                 v-model="snack.show"
@@ -298,17 +316,16 @@
     import RemoteSelector from '@/components/remote-selector'
     import {remoteRoutes} from '@/data/constants'
     import {handleError, put} from '@/utils/ajax'
-    import {random, copyObject} from '@/utils/helpers'
+    import {copyObject, guid} from '@/utils/helpers'
     import * as config from '@/modules/contacts/data/config'
+    import {newContact} from '@/modules/contacts/data/config'
     import * as rules from '@/utils/validations';
     import ContactSection from '@/modules/contacts/contact-section'
     import ContactStepper from '@/modules/contacts/editor/contact-stepper'
     import DatePicker from '@/components/date-picker';
-    import {newContact} from '@/modules/contacts/data/config';
     import WithToast from '@/components/with-toast';
-    import {handleContact} from "@/modules/contacts/data/vuexConfig";
+    import {fetchDetailsSuccess} from '@/modules/contacts/data/vuexConfig';
 
-    import  uuid from 'uuid/v3';
     export default {
         name: 'contact-editor',
         props: ['contact'],
@@ -344,23 +361,29 @@
 
             addEmail() {
                 this.formData.emails.push({
-                    address: null, category: null, isPrimary: true, id: random()
+                    address: null, category: null, isPrimary: true, id: guid()
                 })
             },
 
             addPhone() {
                 this.formData.phones.push({
-                    number: null, category: null, isPrimary: true, id: random()
+                    number: null, category: null, isPrimary: true, id: guid()
                 })
+            },
+            handleAddress(index, address) {
+                const newData = copyObject(address)
+                const {id, ...rest} = newData
+                const toEdit = copyObject(this.formData.addresses[index])
+                this.$set(this.formData.addresses, index, {...toEdit, ...rest});
             },
             addAddress() {
                 this.formData.addresses.push({
-                    freeForm: null, latLon: null, category: null, isPrimary: true, id: random()
+                    freeForm: null, latLon: null, category: null, isPrimary: true, id: guid()
                 })
             },
             addEvent() {
                 this.formData.events.push({
-                    category: null, value: null, key: random()
+                    category: null, value: null, key: guid()
                 })
             },
             removeItem(index, name) {
@@ -376,7 +399,7 @@
                     this.isSubmitting = true
                     put(remoteRoutes.contacts, toSubmit,
                         (data) => {
-                            this.$store.commit(handleContact,data)
+                            this.$store.commit(fetchDetailsSuccess, data)
                             this.$emit('cancel')
                         },
                         (err) => {
@@ -388,9 +411,8 @@
                 } else {
                     this.error('Please fill In all required fields')
                 }
-
             },
-            parser: (it) => ({label: it.name, value: it.id})
+            parser: (it) => ({label: it.name, value: it.id}),
         }
     }
 </script>

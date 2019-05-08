@@ -1,5 +1,5 @@
 <template>
-    <v-stepper non-linear vertical>
+    <v-stepper non-linear vertical flat>
         <v-stepper-step
                 editable
                 step="1"
@@ -39,6 +39,16 @@
         </v-stepper-step>
         <v-stepper-content step="4">
             <slot name="dates"></slot>
+        </v-stepper-content>
+
+        <v-stepper-step
+                step="5"
+                editable
+        >
+            About Me
+        </v-stepper-step>
+        <v-stepper-content step="5">
+            <slot name="about"></slot>
         </v-stepper-content>
     </v-stepper>
 </template>

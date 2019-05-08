@@ -90,18 +90,18 @@
             ...mapState({contacts: state => state.contacts.data})
         },
         methods: {
-            ...mapActions([contactActions.fetchContacts]),
+            ...mapActions([contactActions.fetchAll]),
             showContact(contactId) {
                 const url = `${localRoutes.contacts}/${contactId}`
                 this.$router.push(url)
             }
         },
         mounted() {
-            this.fetchContacts(this.query)
+            this.fetchAll(this.query)
         },
         watch: {
             searchText(val) {
-                this.fetchContacts({query: val})
+                this.fetchAll({query: val})
             }
         }
     }
