@@ -3,7 +3,7 @@
         <v-sheet class="pa-3 ">
             <v-text-field
                     v-model="search"
-                    label="Search Company Directory"
+                    label="Search here"
                     flat
                     solo-inverted
                     hide-details

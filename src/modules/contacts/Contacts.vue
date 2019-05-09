@@ -38,13 +38,9 @@
                             </v-layout>
                             <v-divider></v-divider>
                             <v-card-actions class="pa-3">
-                                Rate this album
                                 <v-spacer></v-spacer>
-                                <v-icon>star_border</v-icon>
-                                <v-icon>star_border</v-icon>
-                                <v-icon>star_border</v-icon>
-                                <v-icon>star_border</v-icon>
-                                <v-icon>star_border</v-icon>
+                                <span><v-icon small>account_balance</v-icon>{{contact.churchLocation}}&nbsp;&nbsp;</span>                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span><v-icon small>people</v-icon>{{contact.cellGroup}}</span>
                             </v-card-actions>
                         </v-card>
                     </v-flex>

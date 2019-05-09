@@ -86,6 +86,8 @@
                                             :parser="parser"
                                             :rules="[rules.required()]"
                                             label="Location*"
+                                            item-text="label"
+                                            item-value="value"
                                     />
                                 </v-flex>
                                 <v-flex xs12 sm6>
@@ -95,6 +97,8 @@
                                             :url='remoteRoutes.cellGroups'
                                             :parser="parser"
                                             label="Mc*"
+                                            item-text="label"
+                                            item-value="value"
                                     />
                                 </v-flex>
                             </v-layout>
@@ -287,11 +291,6 @@
                 <v-btn color="blue darken-1" flat @click.prevent="$emit('cancel')">Close</v-btn>
                 <v-btn color="blue darken-1" flat @click="doSubmit">Save</v-btn>
             </v-card-actions>
-            <v-card-text max-width="500">
-                <pre>
-                    {{JSON.stringify(formData,null,2)}}
-                </pre>
-            </v-card-text>
         </v-card>
         <v-snackbar
                 v-model="snack.show"
