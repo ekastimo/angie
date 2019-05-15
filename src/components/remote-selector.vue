@@ -5,13 +5,15 @@
             :items="items"
             :loading="isLoading"
             :search-input.sync="search"
-            hide-no-data
             hide-selected
             :item-text="itemText"
             :item-value="itemValue"
             :label="label"
             :return-object="returnObject"
             :rules="rules"
+            no-data-text="Type to search..."
+            clearable
+            open-on-clear
             cache-items
             small-chips
     ></v-autocomplete>
@@ -36,12 +38,15 @@
                 default: false
             }
         },
-        data: () => ({
-            isLoading: false,
-            model: null,
-            search: null,
-            items: []
-        }),
+        data() {
+            const items = this.value ? [this.value] : [];
+            return {
+                isLoading: false,
+                model: null,
+                search: null,
+                items
+            }
+        },
 
         methods: {
             loadData(query = {}) {
@@ -64,6 +69,12 @@
         watch: {
             search(val) {
                 this.loadData({query: val})
+            },
+            value(newVal) {
+                const isEmpty = this.items.length === 0
+                if (isEmpty && newVal) {
+                    this.items.push(newVal)
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
     <v-form v-model='valid' ref="form">
         <v-card>
             <v-card-title class="pb-0 pl-4">
@@ -16,6 +16,8 @@
                                     :rules="rules.churchLocation"
                                     label="Location*"
                                     icon="location_city"
+                                    item-text="label"
+                                    item-value="value"
                             />
                         </v-flex>
                         <v-flex xs12 sm6>
@@ -26,6 +28,8 @@
                                     :parser="parser"
                                     label="Mc*"
                                     icon="nature_people"
+                                    item-text="label"
+                                    item-value="value"
                             />
                         </v-flex>
                         <v-flex xs12 sm6 md4>
@@ -98,7 +102,6 @@
                         </v-flex>
                     </v-layout>
                 </v-container>
-
             </v-card-text>
             <v-card-actions>
                 <v-spacer/>
