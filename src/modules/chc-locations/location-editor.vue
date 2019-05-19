@@ -39,7 +39,7 @@
                                     v-model="formData.venue"
                                     :url='remoteRoutes.googleMaps'
                                     :rules="[rules.required()]"
-                                    label="Location*"
+                                    label="Address*"
                                     item-text="freeForm"
                                     item-value="placeId"
                             />
@@ -67,7 +67,8 @@
     import RemoteSelector from '@/components/remote-selector'
     import {remoteRoutes} from '@/data/constants'
     import {handleError, post, put} from '@/utils/ajax'
-    import * as config from '@/modules/chc/data/config'
+    import * as config from '@/modules/chc-locations/data/config'
+    import * as vuexConfig from '@/modules/chc-locations/data/vuexConfig'
     import DatePicker from '@/components/date-picker';
     import * as rules from '@/utils/validations';
     import {copyObject} from '@/utils/helpers'
@@ -83,12 +84,7 @@
             rules,
             valid: false,
             isSubmitting: false,
-            formData: {
-                name: null,
-                details: null,
-                venue: null,
-                meetingTimes: [],
-            }
+            formData: config.newLocation
         }),
         mounted() {
             if (this.seedData) {
@@ -115,7 +111,11 @@
                         (data) => {
                             this.$refs.form.reset()
                             this.$emit('close')
-                            console.log('Contact created', data)
+                            if (this.seedData) {
+                                this.$store.commit(vuexConfig.updateRecord, data)
+                            } else {
+                                this.$store.commit(vuexConfig.addRecord, data)
+                            }
                         },
                         (err) => {
                             handleError(err)

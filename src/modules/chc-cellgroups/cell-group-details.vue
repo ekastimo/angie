@@ -4,8 +4,15 @@
             <v-card>
                 <v-card-title primary-title>
                     <div>
-                        <h3 class="headline mb-0">{{location.name}}</h3>
-                        <div> {{ location.details }}</div>
+                        <h3 class="headline mb-0">{{record.name}}</h3>
+                        <div class="">
+                            <v-chip label>
+                                <v-icon left>label</v-icon>
+                                #{{record.id}}
+                            </v-chip>
+                            <v-chip v-for="time in record.meetingTimes" :key="time">{{time}}</v-chip>
+                        </div>
+                        <div> {{ record.details }}</div>
                     </div>
                 </v-card-title>
                 <v-card-actions>
@@ -20,8 +27,8 @@
 
 <script>
     export default {
-        name: 'location-details',
-        props: ['location']
+        name: 'cell-group-details',
+        props: ['record']
     }
 </script>
 

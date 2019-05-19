@@ -2,9 +2,9 @@ import Vue from 'vue';
 import {get, search} from '@/utils/ajax';
 import {remoteRoutes} from '@/data/constants';
 
-const module = 'locations_';
-const url = remoteRoutes.locations;
-const urlById = remoteRoutes.locations;
+const module = 'events_';
+const url = remoteRoutes.events;
+const urlById = remoteRoutes.events;
 export const fetchAll = module + 'fetchAll';
 export const fetchAllStart = module + 'fetchAllStart';
 export const fetchAllSuccess = module + 'fetchAllSuccess';

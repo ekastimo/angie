@@ -4,7 +4,9 @@ import createLogger from 'vuex/dist/logger';
 import VuexPersistence from 'vuex-persist';
 import core from '@/modules/base/data';
 import contacts from '@/modules/contacts/data/vuexConfig';
-import locations from '@/modules/chc/data/vuexConfig';
+import locations from '@/modules/chc-locations/data/vuexConfig';
+import cellGroups from '@/modules/chc-cellgroups/data/vuexConfig';
+import events from '@/modules/events/data/vuexConfig';
 
 Vue.use(Vuex);
 const vuexLocal = new VuexPersistence({
@@ -29,7 +31,7 @@ const logger = createLogger({
 const store = new Vuex.Store<any>({
     plugins: [vuexLocal.plugin, logger],
     modules: {
-        contacts, core, locations
+        contacts, core, locations, cellGroups, events
     }
 });
 

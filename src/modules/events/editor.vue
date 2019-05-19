@@ -67,14 +67,13 @@
     import RemoteSelector from '@/components/remote-selector'
     import {remoteRoutes} from '@/data/constants'
     import {handleError, post, put} from '@/utils/ajax'
-    import * as config from '@/modules/chc/data/config'
-    import * as vuexConfig from '@/modules/chc/data/vuexConfig'
+    import * as config from '@/modules/chc-locations/data/config'
     import DatePicker from '@/components/date-picker';
     import * as rules from '@/utils/validations';
     import {copyObject} from '@/utils/helpers'
 
     export default {
-        name: 'location-editor',
+        name: 'editor',
         props: ['seedData'],
         components: {DatePicker, RemoteSelector},
         data: () => ({
@@ -116,11 +115,7 @@
                         (data) => {
                             this.$refs.form.reset()
                             this.$emit('close')
-                            if (this.seedData) {
-                                this.$store.commit(vuexConfig.updateRecord, data)
-                            } else {
-                                this.$store.commit(vuexConfig.addRecord, data)
-                            }
+                            console.log('Contact created', data)
                         },
                         (err) => {
                             handleError(err)

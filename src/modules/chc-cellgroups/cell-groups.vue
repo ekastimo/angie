@@ -28,7 +28,7 @@
                 <v-icon dark>add</v-icon>
             </v-btn>
             <v-dialog v-model="dialog" persistent :fullscreen="$vuetify.breakpoint.smAndDown" width="50%">
-                <location-details v-if="showDetails && toEdit" :location="toEdit" @close="resetDialog" @edit="editItem"/>
+                <location-details v-if="showDetails && toEdit" :record="toEdit" @close="resetDialog" @edit="editItem"/>
                 <location-editor v-else @close="resetDialog" :seedData="toEdit"/>
             </v-dialog>
         </v-container>
@@ -37,14 +37,14 @@
 
 <script>
     import Main from '../base/Main.vue';
-    import LocationDetails from '../chc/location-details';
-    import LocationEditor from '../chc/location-editor';
-    import {actionsDefs} from '@/modules/chc/data/vuexConfig';
+    import LocationDetails from './cell-group-details';
+    import LocationEditor from './cell-group-editor';
+    import {actionsDefs} from '@/modules/chc-cellgroups/data/vuexConfig';
     import NoData from '@/components/no-data.vue';
 
     const defaultFilter = {skip: 0, limit: 20, query: ''}
     export default {
-        name: 'locations',
+        name: 'cell-groups',
         components: {Main, LocationDetails, NoData, LocationEditor},
         data() {
             return {
@@ -85,10 +85,10 @@
         },
         computed: {
             isLoading() {
-                return this.$store.state.locations.isLoadingData;
+                return this.$store.state.cellGroups.isLoading;
             },
             records() {
-                return this.$store.state.locations.data;
+                return this.$store.state.cellGroups.data;
             }
         },
         watch: {
