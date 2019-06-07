@@ -7,7 +7,7 @@
 <script>
     import Main from './Main.vue';
     import ContactEditor from '@/modules/contacts/editor/contact-editor';
-    import ContactList from '@/modules/contacts/details/contacts-list.vue';
+    import ContactList from '@/modules/contacts/editor/contact-editor-tabs';
 
     export default {
         components: {ContactEditor, Main, ContactList},

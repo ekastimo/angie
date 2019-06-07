@@ -8,7 +8,7 @@
             </v-card-actions>
             <v-card-text class="pa-0">
                 <v-form v-model='valid' ref="form">
-                    <contact-stepper>
+                    <contact-stepper @submit="doSubmit" @cancel="$emit('cancel')">
                         <template v-slot:bio-data>
                             <v-layout row wrap>
                                 <v-flex xs12 md6>
@@ -105,7 +105,7 @@
                         </template>
                         <template v-slot:dates>
                             <v-card flat>
-                                <v-card-title class="pa-0 elevation-2">
+                                <v-card-title class="pa-0 elevation-0">
                                     <v-icon
                                             left
                                             color="primary"
@@ -148,7 +148,7 @@
                             <v-layout row wrap>
                                 <v-flex xs12>
                                     <v-card flat>
-                                        <v-card-title class="pa-0 elevation-2">
+                                        <v-card-title class="pa-0 elevation-0">
                                             <v-icon
                                                     left
                                                     color="primary"
@@ -192,7 +192,7 @@
                                 </v-flex>
                                 <v-flex xs12>
                                     <v-card flat>
-                                        <v-card-title class="pa-0 elevation-2">
+                                        <v-card-title class="pa-0 elevation-0">
                                             <v-icon
                                                     left
                                                     color="primary"
@@ -236,7 +236,7 @@
                                 </v-flex>
                                 <v-flex xs12>
                                     <v-card flat>
-                                        <v-card-title class="pa-0 elevation-2">
+                                        <v-card-title class="pa-0 elevation-0">
                                             <v-icon
                                                     left
                                                     color="primary"
@@ -286,11 +286,6 @@
                     </contact-stepper>
                 </v-form>
             </v-card-text>
-            <v-card-actions v-if="$vuetify.breakpoint.mdAndUp">
-                <v-spacer/>
-                <v-btn color="blue darken-1" flat @click.prevent="$emit('cancel')">Close</v-btn>
-                <v-btn color="blue darken-1" flat @click="doSubmit">Save</v-btn>
-            </v-card-actions>
         </v-card>
         <v-snackbar
                 v-model="snack.show"
@@ -320,7 +315,7 @@
     import {newContact} from '@/modules/contacts/data/config'
     import * as rules from '@/utils/validations';
     import ContactSection from '@/modules/contacts/contact-section'
-    import ContactStepper from '@/modules/contacts/editor/contact-stepper'
+    import ContactStepper from '@/modules/contacts/editor/contact-editor-tabs'
     import DatePicker from '@/components/date-picker';
     import WithToast from '@/components/with-toast';
     import {fetchDetailsSuccess} from '@/modules/contacts/data/vuexConfig';
